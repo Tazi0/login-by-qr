@@ -40,20 +40,6 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
     }
 }
 
-if(isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $id = uniqid();
-    $res = mysqli_query($con, "INSERT INTO `users` (id, email, `password`)
-                                VALUES ('$id','$email','$pass')");
-    if($res) {
-        $_SESSION['id'] = $id;
-        echo "Register success";
-    } else {
-        echo "The user has not made";
-    }
-}
-
 if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
     $key1 = $_SESSION['keys'][0];
     $key2 = $_SESSION['keys'][1];
@@ -72,6 +58,31 @@ if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
     }
 } 
 
+if(isset($_POST['submit'])) {
+    $email = $_POST['email'];
+    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $id = uniqid();
+    $res = mysqli_query($con, "INSERT INTO `users` (id, email, `password`, created_date)
+                                VALUES ('$id','$email','$pass', now())");
+    if($res) {
+        $_SESSION['id'] = $id;
+        echo "Register success";
+    } else {
+        echo "The user has not made";
+    }
+}
+
+if(isset($_POST['login'])) {
+    $email = $_POST['email'];
+    $res = mysqli_fetch_assoc(mysqli_query($con, "SELECT id,`password` FROM users WHERE email='$email'"));
+    if($res && password_verify($_POST['password'],$res['password'])) {
+        $_SESSION['id'] = $res['id'];
+        echo "Login success";
+    } else {
+        echo "Password & Email incorrect";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +97,7 @@ if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
         <input type="email" name="email" placeholder="Email">
         <input type="password" name="password" placeholder="Password">
         <input type="submit" name="submit" value="Register">
+        <input type="submit" name="login" value="Log in">
     </form>
     <br>
     <img src="qrcode.png" alt="QR CODE">
