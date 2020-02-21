@@ -1,19 +1,35 @@
-**not done yet**
+**almost done**
 
 # Login through a QR code
 
 ## Data information
-userID = random generated identity (`uniqid()`)
-i = random generated key code (`md5(microtime().rand())`)
+userID = random generated identity (`uniqid()`) <br>
+i = random generated key code (`md5(microtime().rand())`) <br>
 key = same as i (but not i)
 
 ## Database
-empty
+Check database.sql
 
 ## Todo
- - [ ] Find a qrcode api
- - [ ] generate a random link with users ID (confirm.php?id=userID&i=key&e=key2)
- - [ ] paste generated keys + userID + confirmed = 0 in db
- - [ ] show link as qr code
- - [ ] check each minute if it's confirmed yet
- - [ ] phone confirmes if it's opened (ofcourse checks if the user is logged in there)
+ - [x] Find a qrcode api
+ - [x] generate a random link with users ID (confirm.php?id=userID&i=key&e=key2)
+ - [x] paste generated keys + userID + confirmed = 0 in db
+ - [x] show link as qr code
+ - [x] check 0.5 minute if it's confirmed yet
+ - [x] phone confirmes if it's opened (ofcourse checks if the user is logged in there)
+
+
+# Installation
+1. Clone/download the github.
+2. Upload the tables to your desired database.
+3. Check the `config/configuration.php` to configure your personal settings.
+4. Configure your database connection in `cconfig/db.php`.
+5. Drag in the files to your website.
+6. Style it or edit it any way shape or form.
+
+if you incounter any errors please report it here.
+
+
+# WARNING!!
+
+on iPhone when you scan the code it brings up a "safari" look alike, make sure the user opens the normal safari by pressing the button right bottom. (if that user is logged in by the normal safari)
