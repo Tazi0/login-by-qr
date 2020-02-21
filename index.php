@@ -27,10 +27,11 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
     } else {
         echo "You are not logged in so can't verify";
     }
-} else if(!isset($_POST['submit'])) {
+} else if(!isset($_POST['submit']) && !isset($_SESSION['keys'])) {
     $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]index.php";
     $key1 = md5(microtime().rand());
     $key2 = md5(microtime().rand());
+    $_SESSION['keys'] = array($key1, $key2);
     QRcode::png($actual_link . "?i=$key1&e=$key2", 'qrcode.png', 'L', 4);
     $res = mysqli_query($con, "INSERT INTO `login-codes` (key1, key2)
                                 VALUES ('$key1','$key2')");
@@ -52,6 +53,8 @@ if(isset($_POST['submit'])) {
         echo "The user has not made";
     }
 }
+
+$conf = false;
 
 ?>
 
