@@ -2,7 +2,6 @@
 
 session_start();
 require "config/db.php";
-require "phpqrcode.php";
 
 if(isset($_GET['i']) && isset($_GET['e'])) {
     if(isset($_SESSION['id'])) {
@@ -26,7 +25,7 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
     } else {
         echo "You are not logged in so can't verify";
     }
-} else if(!isset($_POST['submit']) && !isset($_SESSION['keys'])) {
+} /* else if(!isset($_POST['submit']) && !isset($_SESSION['keys'])) {
     $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]index.php";
     $key1 = md5(microtime().rand());
     $key2 = md5(microtime().rand());
@@ -38,17 +37,18 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
     if(!$res) {
         echo "There was an error";
     }
-}
+} */
 
 if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
     $key1 = $_SESSION['keys'][0];
     $key2 = $_SESSION['keys'][1];
-    $a = mysqli_query($con, "SELECT userID,confirmed FROM `login-codes` WHERE key1='$key1' AND key2='$key2' LIMIT 1");
+    $a = mysqli_query($con, "SELECT userID,confirmed FROM `login-codes` WHERE key1='$key1' AND key2='$key2'");
+    $a = mysqli_fetch_assoc($a);
     if($a) {
-        $a = mysqli_fetch_assoc($a);
         $check = intval($a['confirmed']);
         if($check) {
             $id = $a['userID'];
+            $e = mysqli_query($con, "DELETE FROM `login-codes` WHERE key1='$key1' AND key2='$key2'");
             // var_dump($id);
             unset($_SESSION['keys']);
             $_SESSION['verified'] = true;
@@ -56,7 +56,7 @@ if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
             header("Location: welcome.php");
         }
     }
-} 
+}
 
 if(isset($_POST['submit'])) {
     $email = $_POST['email'];
@@ -83,6 +83,11 @@ if(isset($_POST['login'])) {
     }
 }
 
+if(isset($_POST['logout'])) {
+    session_unset();
+    echo "Logged out";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -98,17 +103,31 @@ if(isset($_POST['login'])) {
         <input type="password" name="password" placeholder="Password">
         <input type="submit" name="submit" value="Register">
         <input type="submit" name="login" value="Log in">
+        <input type="submit" name="logout" value="Log out">
     </form>
     <br>
-    <img src="qrcode.png" alt="QR CODE">
+    <?php
+        if(!isset($_SESSION['keys']) && !isset($_SESSION['id'])) {
+            $key1 = md5(microtime().rand());
+            $key2 = md5(microtime().rand());
+            $_SESSION['keys'] = array($key1, $key2);
+            $_SESSION['verified'] = false;
+            $res = mysqli_query($con, "INSERT INTO `login-codes` (key1, key2, created_date)
+                                        VALUES ('$key1','$key2', now())");
+        }
+        if(!isset($_SESSION['id'])) {
+            echo "<img src='qr.php' alt='qr code' />";
+        }
+        var_dump($_SESSION);
+    ?>
 
-        <?php
-            if(isset($_SESSION['keys'])) {
-                echo "<script>r = true</script>";
-            } else {
-                echo "<script>r = false</script>";
-            }
-        ?>
+    <?php
+        if(isset($_SESSION['keys']) && !isset($_SESSION['id'])) {
+            echo "<script>r = true</script>";
+        } else {
+            echo "<script>r = false</script>";
+        }
+    ?>
         
     <script>
         if(r) {
