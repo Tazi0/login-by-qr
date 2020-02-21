@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 require "config/db.php";
 require "phpqrcode.php";
@@ -32,6 +31,7 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
     $key1 = md5(microtime().rand());
     $key2 = md5(microtime().rand());
     $_SESSION['keys'] = array($key1, $key2);
+    $_SESSION['verified'] = false;
     QRcode::png($actual_link . "?i=$key1&e=$key2", 'qrcode.png', 'L', 4);
     $res = mysqli_query($con, "INSERT INTO `login-codes` (key1, key2)
                                 VALUES ('$key1','$key2')");
@@ -54,7 +54,7 @@ if(isset($_POST['submit'])) {
     }
 }
 
-if(isset($_GET['check']) && isset($_SESSION['keys'])) {
+if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
     $key1 = $_SESSION['keys'][0];
     $key2 = $_SESSION['keys'][1];
     $a = mysqli_query($con, "SELECT userID,confirmed FROM `login-codes` WHERE key1='$key1' AND key2='$key2' LIMIT 1");
@@ -64,6 +64,8 @@ if(isset($_GET['check']) && isset($_SESSION['keys'])) {
         if($check) {
             $id = $a['userID'];
             // var_dump($id);
+            unset($_SESSION['keys']);
+            $_SESSION['verified'] = true;
             $_SESSION['userID'] = $id;
             header("Location: welcome.php");
         }
@@ -99,11 +101,7 @@ if(isset($_GET['check']) && isset($_SESSION['keys'])) {
     <script>
         if(r) {
             setTimeout(() => {
-                var url = window.location.href;    
-                if (!url.indexOf('?')){
-                    url += '?check=1'
-                }
-                window.location.href = url;
+                location.reload();
             }, 10000);
         }
     </script>
