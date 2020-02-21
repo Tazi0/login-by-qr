@@ -29,6 +29,12 @@ Check database.sql
 
 if you incounter any errors please report it here.
 
+## Usage
+1. Register/Login through your phone with any browser
+2. Goto the register/login page on your pc
+3. Scan the qr-code and make sure you open it with the same browser your logged in too
+4. Wait a few seconds and poof
+
 
 # WARNING!!
 
