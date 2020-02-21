@@ -95,8 +95,20 @@ if(isset($_POST['logout'])) {
         
     <script>
         if(r) {
+            loop()
+        }
+        function loop() {
+            var inputs = document.querySelectorAll('input');
             setTimeout(() => {
-                location.reload();
+                find = false
+                for (let i = 0; i < inputs.length; i++) {
+                    const e = inputs[i];
+                    if(e.value != "" && e.type != "submit") [
+                        find = true
+                    ]
+                }
+                if(!find) location.reload();
+                else loop();
             }, 10000);
         }
     </script>
