@@ -62,8 +62,8 @@ if(isset($_POST['submit'])) {
     $email = $_POST['email'];
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $id = uniqid();
-    $res = mysqli_query($con, "INSERT INTO `users` (id, email, `password`, created_date)
-                                VALUES ('$id','$email','$pass', now())");
+    $res = mysqli_query($con, "INSERT INTO `users` (id, email, `password`)
+                                VALUES('$id','$email','$pass')");
     if($res) {
         $_SESSION['id'] = $id;
         echo "Register success";
