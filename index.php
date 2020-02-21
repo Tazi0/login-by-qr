@@ -54,7 +54,21 @@ if(isset($_POST['submit'])) {
     }
 }
 
-$conf = false;
+if(isset($_GET['check']) && isset($_SESSION['keys'])) {
+    $key1 = $_SESSION['keys'][0];
+    $key2 = $_SESSION['keys'][1];
+    $a = mysqli_query($con, "SELECT userID,confirmed FROM `login-codes` WHERE key1='$key1' AND key2='$key2' LIMIT 1");
+    if($a) {
+        $a = mysqli_fetch_assoc($a);
+        $check = intval($a['confirmed']);
+        if($check) {
+            $id = $a['userID'];
+            // var_dump($id);
+            $_SESSION['userID'] = $id;
+            header("Location: welcome.php");
+        }
+    }
+} 
 
 ?>
 
@@ -73,5 +87,25 @@ $conf = false;
     </form>
     <br>
     <img src="qrcode.png" alt="QR CODE">
+
+        <?php
+            if(isset($_SESSION['keys'])) {
+                echo "<script>r = true</script>";
+            } else {
+                echo "<script>r = false</script>";
+            }
+        ?>
+        
+    <script>
+        if(r) {
+            setTimeout(() => {
+                var url = window.location.href;    
+                if (!url.indexOf('?')){
+                    url += '?check=1'
+                }
+                window.location.href = url;
+            }, 10000);
+        }
+    </script>
 </body>
 </html>
