@@ -3,6 +3,8 @@
 session_start();
 require "config/db.php";
 
+$config = require('config/configuration.php');
+
 if(isset($_GET['i']) && isset($_GET['e'])) {
     if(isset($_SESSION['id'])) {
         // echo "lets go";
@@ -19,11 +21,19 @@ if(isset($_GET['i']) && isset($_GET['e'])) {
             if(!$res) {
                 echo "Updating went wrong!";
             } else {
-                echo "All good, you can close the page now!";
+                if($config['closeTabAfterConfirm']) {
+                    echo "<script>window.close();</script>";
+                } else {
+                    echo "All good, you can close the page now!";
+                }
             }
         }
     } else {
-        echo "You are not logged in so can't verify <br><a href='index.php'>click here to login</a>";
+        if($config['notLoggedInGotoLogin']) {
+            header("Location: " . $config['pages']['login']);
+        } else {
+            echo "You are not logged in so can't verify <br><a href='index.php'>click here to login</a>";
+        }
     }
 }
 

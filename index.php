@@ -3,6 +3,8 @@
 session_start();
 require "config/db.php";
 
+$config = require('config/configuration.php');
+
 if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
     $key1 = $_SESSION['keys'][0];
     $key2 = $_SESSION['keys'][1];
@@ -17,7 +19,7 @@ if(isset($_SESSION['keys']) && isset($_SESSION['verified'])) {
             unset($_SESSION['keys']);
             $_SESSION['verified'] = true;
             $_SESSION['userID'] = $id;
-            header("Location: welcome.php");
+            header("Location: ". $config["page"]["welcome"]);
         }
     }
 }
@@ -27,7 +29,7 @@ if(isset($_POST['submit'])) {
     $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $id = uniqid();
     $res = mysqli_query($con, "INSERT INTO `users` (id, email, `password`)
-                                VALUES('$id','$email','$pass')");
+                               VALUES('$id','$email','$pass')");
     if($res) {
         $_SESSION['id'] = $id;
         echo "Register success";
@@ -48,8 +50,7 @@ if(isset($_POST['login'])) {
 }
 
 if(isset($_POST['logout'])) {
-    session_unset();
-    echo "Logged out";
+    header("Location: ./logout.php");
 }
 
 ?>
@@ -82,7 +83,6 @@ if(isset($_POST['logout'])) {
         if(!isset($_SESSION['id'])) {
             echo "<img src='qr.php' alt='qr code' />";
         }
-        var_dump($_SESSION);
     ?>
 
     <?php
