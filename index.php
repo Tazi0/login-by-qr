@@ -7,11 +7,27 @@ require "phpqrcode.php";
 
 if(isset($_GET['i']) && isset($_GET['e'])) {
     if(isset($_SESSION['id'])) {
-        echo "lets go";
+        // echo "lets go";
+        $key1 = $_GET['i'];
+        $key2 = $_GET['e'];
+        $res = mysqli_query($con, "SELECT * FROM `login-codes` WHERE key1='$key1' AND key2='$key2' AND confirmed=0");
+        if(!$res) {
+            echo "Nothing found";
+        } else {
+            $res = mysqli_fetch_assoc($res);
+            $id = $_SESSION['id'];
+            // var_dump($res);
+            $res = mysqli_query($con, "UPDATE `login-codes` SET userID='$id', confirmed=1 WHERE key1='$key1' AND key2='$key2' AND confirmed=0");
+            if(!$res) {
+                echo "Updating went wrong!";
+            } else {
+                echo "All good, you can close the page now!";
+            }
+        }
     } else {
         echo "You are not logged in so can't verify";
     }
-} else {
+} else if(!isset($_POST['submit'])) {
     $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]index.php";
     $key1 = md5(microtime().rand());
     $key2 = md5(microtime().rand());
@@ -31,8 +47,9 @@ if(isset($_POST['submit'])) {
                                 VALUES ('$id','$email','$pass')");
     if($res) {
         $_SESSION['id'] = $id;
+        echo "Register success";
     } else {
-        echo "The user has been made";
+        echo "The user has not made";
     }
 }
 
@@ -49,7 +66,7 @@ if(isset($_POST['submit'])) {
     <form action="" method="post">
         <input type="email" name="email" placeholder="Email">
         <input type="password" name="password" placeholder="Password">
-        <input type="submit" name="sumit" value="Register">
+        <input type="submit" name="submit" value="Register">
     </form>
     <br>
     <img src="qrcode.png" alt="QR CODE">
