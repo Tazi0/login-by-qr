@@ -18,7 +18,7 @@ key2(e) = encrypted ipaddress
 |created_date
 
 ## Dependencies
- - [PHP QR Code](http://phpqrcode.sourceforge.net/)
+ - [PHP QR Code](http://phpqrcode.sourceforge.net/) (auto installed `phpqrcode.php`)
  - [PHP](https://www.php.net/)
  - [Database](https://www.mysql.com/)
  - [Hosting (apache recommended)](https://www.apache.org/)
