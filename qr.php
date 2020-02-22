@@ -1,4 +1,10 @@
 <?php
+
+
+/*      QR code (required)     */
+/*          made by            */
+/*           Tazio             */
+
 session_start();
 require "phpqrcode.php";
 $config = require('config/configuration.php');
@@ -10,5 +16,8 @@ if(isset($_SESSION['keys'])) {
     $actual_link = $base . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/" . $config["page"]["confirmation"];
     QRcode::png($actual_link . "?i=$key1");
 }
+
+
+/* ----------2020------------- */
 
 ?>

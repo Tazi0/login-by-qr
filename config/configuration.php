@@ -1,5 +1,8 @@
 <?php
 
+/*      QR code (required)     */
+/*          made by            */
+/*           Tazio             */
 
 return array(
     "page" => [
@@ -12,9 +15,12 @@ return array(
         "userTable" => "users",
         "loginDump" => "login-codes"
     ],
-    "closeTabAfterConfirm" => false,
-    "notLoggedInGotoLogin" => false,
-    "securityKey" => "testKey"
+    "notLoggedInGotoLogin" => true,
+    "securityKey" => "PleaseChangeMe",
+    "debug" => true
 );
+
+
+/* ----------2020------------- */
 
 ?>
