@@ -8,7 +8,7 @@ if(isset($_SESSION['keys'])) {
     $key2 = $_SESSION['keys'][1];
     $base = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
     $actual_link = $base . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/" . $config["page"]["confirmation"];
-    QRcode::png($actual_link . "?i=$key1&e=$key2");
+    QRcode::png($actual_link . "?i=$key1");
 }
 
 ?>

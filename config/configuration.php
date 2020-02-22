@@ -13,7 +13,8 @@ return array(
         "loginDump" => "login-codes"
     ],
     "closeTabAfterConfirm" => false,
-    'notLoggedInGotoLogin' => false
+    "notLoggedInGotoLogin" => false,
+    "securityKey" => "testKey"
 );
 
 ?>
