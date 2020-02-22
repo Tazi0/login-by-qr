@@ -1,5 +1,3 @@
-**almost done**
-
 # Login through a QR code
 
 ## Data information
@@ -8,7 +6,13 @@ key1(i) =  random number (`md5(microtime().rand())`)<br>
 key2(e) = encrypted ipaddress
 
 ## Database
-Check database.sql
+|login-codes|users|
+|-----|--|
+|userID|id|
+|key1|email|
+|key2|password|
+|confirmed
+|created_date
 
 ## Todo
  - [x] Find a qrcode api
@@ -18,6 +22,12 @@ Check database.sql
  - [x] check 0.5 minute if it's confirmed yet
  - [x] phone confirmes if it's opened (ofcourse checks if the user is logged in there)
 
+
+## Dependencies
+ - [PHP QR Code](http://phpqrcode.sourceforge.net/)
+ - [PHP](https://www.php.net/)
+ - [Database](https://www.mysql.com/)
+ - [Hosting (apache recommended)](https://www.apache.org/)
 
 # Installation
 1. Clone/download the github.
@@ -37,5 +47,4 @@ if you incounter any errors please report it here.
 
 
 # WARNING!!
-
 on iPhone when you scan the code it brings up a "safari" look alike, make sure the user opens the normal safari by pressing the button right bottom. (if that user is logged in by the normal safari)
