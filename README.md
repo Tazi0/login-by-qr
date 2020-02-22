@@ -4,8 +4,8 @@
 
 ## Data information
 userID = random generated identity (`uniqid()`) <br>
-i = random generated key code (`md5(microtime().rand())`) <br>
-key = same as i (but not i)
+key1(i) =  random number (`md5(microtime().rand())`)<br>
+key2(e) = encrypted ipaddress
 
 ## Database
 Check database.sql
